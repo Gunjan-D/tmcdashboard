@@ -65,13 +65,10 @@ interface NavItem {
           <div class="operator-info">
             <mat-icon>account_circle</mat-icon>
             <div>
-              <div class="op-name">{{ auth.user()?.fullName }}</div>
-              <div class="op-role">{{ auth.user()?.role }}</div>
+              <div class="op-name">DE TMC Operator</div>
+              <div class="op-role">Traffic Management Center</div>
             </div>
           </div>
-          <button mat-icon-button matTooltip="Sign out" (click)="auth.logout()">
-            <mat-icon>logout</mat-icon>
-          </button>
         </div>
       </mat-sidenav>
 
@@ -132,12 +129,8 @@ export class ShellComponent implements OnInit {
   private timer: ReturnType<typeof setInterval> | null = null;
 
   ngOnInit(): void {
-    // Connect WebSocket after authentication
-    const token = this.auth.token();
-    const username = this.auth.user()?.username;
-    if (token && username) {
-      this.ws.connect(token, username);
-    }
+    // Connect WebSocket for real-time device/incident updates
+    this.ws.connect('demo-token', 'operator');
 
     // Clock tick
     this.timer = setInterval(() => { this.now = new Date(); }, 1000);
