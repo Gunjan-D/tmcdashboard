@@ -1,4 +1,9 @@
-# Delaware TMC Operations Dashboard
+﻿# Delaware TMC Operations Dashboard
+
+> **Live Demo:** https://gunjan-d.github.io/tmcdashboard/
+>
+> **Demo Credentials:** `operator.jsmith` / `Tmc@2026!`  |  `supervisor.mjones` / `Super@2026!`
+
 ### Full-Stack Portfolio Project 
 
 ---
@@ -7,15 +12,15 @@ This project is intended solely for personal learning and practice purposes and 
 ## Project Overview
 
 A production-grade **Traffic Management Center (TMC) Operations Dashboard** built for the
-Delaware Department of Transportation (DE DOT). The system supports 24×7 ITS corridor
+Delaware Department of Transportation (DE DOT). The system supports 24Ã—7 ITS corridor
 monitoring across the I-95, US-1, US-13 and DE-40 corridors in Smyrna, DE.
 
 **Core capabilities:**
-- Real-time traffic incident lifecycle management (OPEN → ASSIGNED → IN_PROGRESS → RESOLVED)
+- Real-time traffic incident lifecycle management (OPEN â†’ ASSIGNED â†’ IN_PROGRESS â†’ RESOLVED)
 - ITS field device health monitoring via SNMP (traffic signals, CCTV cameras, VMS signs, ramp meters)
 - WebSocket push notifications to TMC operators
 - Automated Quartz-style scheduled jobs (device polls, daily reports)
-- Excel (XLSX) report generation — Daily Incident Summary & Device Health
+- Excel (XLSX) report generation â€” Daily Incident Summary & Device Health
 - JWT authentication with LDAP integration path
 - Full REST API with Swagger/OpenAPI documentation
 
@@ -52,64 +57,64 @@ monitoring across the I-95, US-1, US-13 and DE-40 corridors in Smyrna, DE.
 
 ```
 DE-TMC-Dashboard/
-│
-├── backend/                          # NestJS REST API + WebSocket Gateway
-│   ├── src/
-│   │   ├── main.ts                   # Bootstrap: CORS, ValidationPipe, Swagger
-│   │   ├── app.module.ts             # Root module: MongoDB, Schedule, JWT
-│   │   ├── auth/                     # JWT + LDAP authentication
-│   │   │   ├── auth.service.ts       # bcrypt + LDAP bind
-│   │   │   ├── auth.controller.ts    # POST /api/auth/login
-│   │   │   ├── jwt.strategy.ts       # Passport JWT strategy
-│   │   │   └── jwt-auth.guard.ts
-│   │   ├── incidents/                # Incident lifecycle module
-│   │   │   ├── incident.schema.ts    # Mongoose schema + indexes
-│   │   │   ├── incident.dto.ts       # class-validator DTOs
-│   │   │   ├── incident.service.ts   # Business logic + WebSocket broadcast
-│   │   │   └── incident.controller.ts # REST: GET/POST/PATCH/DELETE
-│   │   ├── devices/                  # ITS device monitoring
-│   │   │   ├── device.schema.ts      # Mongoose schema
-│   │   │   ├── snmp.service.ts       # SNMP GET/WALK + NTCIP OID map
-│   │   │   ├── device.service.ts     # Poll logic, seeding, health summary
-│   │   │   └── device.controller.ts  # REST: GET/POST poll
-│   │   ├── gateway/                  # WebSocket (Socket.io)
-│   │   │   └── tmc.gateway.ts        # Channels: incident:*, device:*, heartbeat
-│   │   ├── reports/                  # XLSX generation
-│   │   │   ├── reports.service.ts    # ExcelJS workbooks, DE DOT branding
-│   │   │   └── reports.controller.ts # GET /api/reports/* → blob stream
-│   │   └── scheduler/                # Quartz-equivalent cron jobs
-│   │       └── scheduler.service.ts  # SNMP poll (2 min), heartbeat (30 s), daily report
-│   ├── sql-schemas/
-│   │   └── schema.sql                # Oracle / MySQL / PostgreSQL / MS SQL DDL
-│   ├── package.json
-│   └── tsconfig.json
-│
-└── frontend/                         # Angular 17 SPA
-    ├── src/
-    │   ├── app/
-    │   │   ├── app.config.ts         # Providers: router, HttpClient+interceptors, animations
-    │   │   ├── app.routes.ts         # Lazy-loaded routes with auth guard
-    │   │   ├── core/
-    │   │   │   ├── models/           # TypeScript interfaces: Incident, Device
-    │   │   │   ├── services/
-    │   │   │   │   ├── api.service.ts        # All REST/AJAX calls (HttpClient)
-    │   │   │   │   ├── websocket.service.ts  # Socket.io typed observables
-    │   │   │   │   └── auth.store.ts         # Signal-based auth state store
-    │   │   │   ├── interceptors/
-    │   │   │   │   └── auth.interceptor.ts   # JWT Bearer injection
-    │   │   │   └── guards/auth.guard.ts
-    │   │   ├── login/login.component.ts       # Login page
-    │   │   ├── dashboard/                     # KPI cards + live charts (SIGNALS)
-    │   │   ├── incidents/                     # Full incident management table
-    │   │   ├── devices/                       # SNMP device grid + alerts
-    │   │   ├── reports/                       # Excel download page
-    │   │   └── shared/layout/shell/           # Sidebar + toolbar shell
-    │   ├── environments/
-    │   │   ├── environment.ts        # Dev: localhost:3000
-    │   │   └── environment.prod.ts   # Prod: Apache reverse proxy /api
-    │   └── styles.scss               # DE DOT dark theme, Material overrides
-    ├── angular.json
-    └── package.json
+â”‚
+â”œâ”€â”€ backend/                          # NestJS REST API + WebSocket Gateway
+â”‚   â”œâ”€â”€ src/
+â”‚   â”‚   â”œâ”€â”€ main.ts                   # Bootstrap: CORS, ValidationPipe, Swagger
+â”‚   â”‚   â”œâ”€â”€ app.module.ts             # Root module: MongoDB, Schedule, JWT
+â”‚   â”‚   â”œâ”€â”€ auth/                     # JWT + LDAP authentication
+â”‚   â”‚   â”‚   â”œâ”€â”€ auth.service.ts       # bcrypt + LDAP bind
+â”‚   â”‚   â”‚   â”œâ”€â”€ auth.controller.ts    # POST /api/auth/login
+â”‚   â”‚   â”‚   â”œâ”€â”€ jwt.strategy.ts       # Passport JWT strategy
+â”‚   â”‚   â”‚   â””â”€â”€ jwt-auth.guard.ts
+â”‚   â”‚   â”œâ”€â”€ incidents/                # Incident lifecycle module
+â”‚   â”‚   â”‚   â”œâ”€â”€ incident.schema.ts    # Mongoose schema + indexes
+â”‚   â”‚   â”‚   â”œâ”€â”€ incident.dto.ts       # class-validator DTOs
+â”‚   â”‚   â”‚   â”œâ”€â”€ incident.service.ts   # Business logic + WebSocket broadcast
+â”‚   â”‚   â”‚   â””â”€â”€ incident.controller.ts # REST: GET/POST/PATCH/DELETE
+â”‚   â”‚   â”œâ”€â”€ devices/                  # ITS device monitoring
+â”‚   â”‚   â”‚   â”œâ”€â”€ device.schema.ts      # Mongoose schema
+â”‚   â”‚   â”‚   â”œâ”€â”€ snmp.service.ts       # SNMP GET/WALK + NTCIP OID map
+â”‚   â”‚   â”‚   â”œâ”€â”€ device.service.ts     # Poll logic, seeding, health summary
+â”‚   â”‚   â”‚   â””â”€â”€ device.controller.ts  # REST: GET/POST poll
+â”‚   â”‚   â”œâ”€â”€ gateway/                  # WebSocket (Socket.io)
+â”‚   â”‚   â”‚   â””â”€â”€ tmc.gateway.ts        # Channels: incident:*, device:*, heartbeat
+â”‚   â”‚   â”œâ”€â”€ reports/                  # XLSX generation
+â”‚   â”‚   â”‚   â”œâ”€â”€ reports.service.ts    # ExcelJS workbooks, DE DOT branding
+â”‚   â”‚   â”‚   â””â”€â”€ reports.controller.ts # GET /api/reports/* â†’ blob stream
+â”‚   â”‚   â””â”€â”€ scheduler/                # Quartz-equivalent cron jobs
+â”‚   â”‚       â””â”€â”€ scheduler.service.ts  # SNMP poll (2 min), heartbeat (30 s), daily report
+â”‚   â”œâ”€â”€ sql-schemas/
+â”‚   â”‚   â””â”€â”€ schema.sql                # Oracle / MySQL / PostgreSQL / MS SQL DDL
+â”‚   â”œâ”€â”€ package.json
+â”‚   â””â”€â”€ tsconfig.json
+â”‚
+â””â”€â”€ frontend/                         # Angular 17 SPA
+    â”œâ”€â”€ src/
+    â”‚   â”œâ”€â”€ app/
+    â”‚   â”‚   â”œâ”€â”€ app.config.ts         # Providers: router, HttpClient+interceptors, animations
+    â”‚   â”‚   â”œâ”€â”€ app.routes.ts         # Lazy-loaded routes with auth guard
+    â”‚   â”‚   â”œâ”€â”€ core/
+    â”‚   â”‚   â”‚   â”œâ”€â”€ models/           # TypeScript interfaces: Incident, Device
+    â”‚   â”‚   â”‚   â”œâ”€â”€ services/
+    â”‚   â”‚   â”‚   â”‚   â”œâ”€â”€ api.service.ts        # All REST/AJAX calls (HttpClient)
+    â”‚   â”‚   â”‚   â”‚   â”œâ”€â”€ websocket.service.ts  # Socket.io typed observables
+    â”‚   â”‚   â”‚   â”‚   â””â”€â”€ auth.store.ts         # Signal-based auth state store
+    â”‚   â”‚   â”‚   â”œâ”€â”€ interceptors/
+    â”‚   â”‚   â”‚   â”‚   â””â”€â”€ auth.interceptor.ts   # JWT Bearer injection
+    â”‚   â”‚   â”‚   â””â”€â”€ guards/auth.guard.ts
+    â”‚   â”‚   â”œâ”€â”€ login/login.component.ts       # Login page
+    â”‚   â”‚   â”œâ”€â”€ dashboard/                     # KPI cards + live charts (SIGNALS)
+    â”‚   â”‚   â”œâ”€â”€ incidents/                     # Full incident management table
+    â”‚   â”‚   â”œâ”€â”€ devices/                       # SNMP device grid + alerts
+    â”‚   â”‚   â”œâ”€â”€ reports/                       # Excel download page
+    â”‚   â”‚   â””â”€â”€ shared/layout/shell/           # Sidebar + toolbar shell
+    â”‚   â”œâ”€â”€ environments/
+    â”‚   â”‚   â”œâ”€â”€ environment.ts        # Dev: localhost:3000
+    â”‚   â”‚   â””â”€â”€ environment.prod.ts   # Prod: Apache reverse proxy /api
+    â”‚   â””â”€â”€ styles.scss               # DE DOT dark theme, Material overrides
+    â”œâ”€â”€ angular.json
+    â””â”€â”€ package.json
 ```
 
 ---
@@ -125,7 +130,7 @@ DE-TMC-Dashboard/
 ```bash
 cd backend
 npm install
-# Set environment variables (optional – defaults work for local dev):
+# Set environment variables (optional â€“ defaults work for local dev):
 # MONGO_URI=mongodb://localhost:27017/de_tmc
 # JWT_SECRET=your-secret
 npm run start:dev
@@ -151,7 +156,7 @@ npm start
 
 ## Key Technical Highlights
 
-### Angular Signals (SIGNALS – desired skill)
+### Angular Signals (SIGNALS â€“ desired skill)
 ```typescript
 // dashboard.component.ts
 readonly totalActive = computed(() =>
@@ -208,7 +213,7 @@ const sheet = workbook.addWorksheet('Daily Incidents');
 ## Production Deployment (Apache + Node.js)
 
 ```apache
-# Apache httpd.conf – reverse proxy for TMC backend
+# Apache httpd.conf â€“ reverse proxy for TMC backend
 ProxyPass        /api       http://localhost:3000/api
 ProxyPassReverse /api       http://localhost:3000/api
 ProxyPass        /tmc       ws://localhost:3000/tmc
@@ -227,5 +232,6 @@ DocumentRoot /var/www/tmc
 Portfolio project demonstrating full-stack development for the
 **Delaware DOT Traffic Management Center Product Specialist** role.
 
-*Technologies: Angular 17 · TypeScript · NestJS · Node.js · MongoDB · Socket.io · ExcelJS ·
-SNMP/NTCIP · LDAP · JWT · Angular Material · Angular Signals · Oracle/MySQL/PostgreSQL DDL*
+*Technologies: Angular 17 Â· TypeScript Â· NestJS Â· Node.js Â· MongoDB Â· Socket.io Â· ExcelJS Â·
+SNMP/NTCIP Â· LDAP Â· JWT Â· Angular Material Â· Angular Signals Â· Oracle/MySQL/PostgreSQL DDL*
+
