@@ -1,6 +1,6 @@
 ﻿# Delaware TMC Operations Dashboard
 
-> **Live Demo:** https://gunjan-d.github.io/tmcdashboard/login
+> **Live Demo:** https://gunjan-d.github.io/tmcdashboard/dashboard
 >
 > **Demo Credentials:** `operator.jsmith` / `Tmc@2026!`  |  `supervisor.mjones` / `Super@2026!`
 
