@@ -37,6 +37,33 @@ export class AuthStore {
   readonly isOperator = computed(() => !!this._user());
   readonly isSupervisor = computed(() => this._user()?.role === 'SUPERVISOR');
 
+  // Demo credentials for offline / GitHub Pages mode
+  private readonly DEMO_USERS: Record<string, { password: string; user: AuthUser }> = {
+    'operator.jsmith': {
+      password: 'Tmc@2026!',
+      user: { id: 1, username: 'operator.jsmith', role: 'OPERATOR', fullName: 'John Smith', email: 'jsmith@deldot.gov' },
+    },
+    'supervisor.mjones': {
+      password: 'Super@2026!',
+      user: { id: 2, username: 'supervisor.mjones', role: 'SUPERVISOR', fullName: 'Mary Jones', email: 'mjones@deldot.gov' },
+    },
+  };
+
+  private demoLogin(username: string, password: string): boolean {
+    const entry = this.DEMO_USERS[username];
+    if (entry && entry.password === password) {
+      const token = 'demo.' + btoa(JSON.stringify({ sub: entry.user.id, username, role: entry.user.role }));
+      localStorage.setItem('tmc_token', token);
+      localStorage.setItem('tmc_user', JSON.stringify(entry.user));
+      this._token.set(token);
+      this._user.set(entry.user);
+      this._loading.set(false);
+      this.router.navigate(['/dashboard']);
+      return true;
+    }
+    return false;
+  }
+
   login(username: string, password: string): void {
     this._loading.set(true);
     this._error.set(null);
@@ -56,8 +83,16 @@ export class AuthStore {
           this.router.navigate(['/dashboard']);
         },
         error: (err) => {
-          this._error.set(err.error?.message ?? 'Login failed. Please check your credentials.');
-          this._loading.set(false);
+          // Backend unreachable (GitHub Pages / offline) — fall back to demo auth
+          if (err.status === 0 || err.status === 504 || err.status === 502) {
+            if (!this.demoLogin(username, password)) {
+              this._error.set('Login failed. Please check your credentials.');
+              this._loading.set(false);
+            }
+          } else {
+            this._error.set(err.error?.message ?? 'Login failed. Please check your credentials.');
+            this._loading.set(false);
+          }
         },
       });
   }
