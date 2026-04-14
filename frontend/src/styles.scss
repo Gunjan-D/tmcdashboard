@@ -1,0 +1,222 @@
+/* ============================================================
+   DE TMC Dashboard – Global Stylesheet
+   Angular Material + custom TMC theme overrides
+   ============================================================ */
+
+/* CSS custom properties – DE DOT brand colours */
+:root {
+  --tmc-navy:        #002D72;
+  --tmc-gold:        #E8A900;
+  --tmc-red:         #CC0000;
+  --tmc-green:       #2E7D32;
+  --tmc-orange:      #E65100;
+  --tmc-bg-dark:     #1A1C2A;    /* dark console background */
+  --tmc-bg-panel:    #23263A;
+  --tmc-sidebar-w:   240px;
+  --tmc-header-h:    64px;
+  --tmc-text-light:  rgba(255,255,255,0.87);
+  --tmc-text-muted:  rgba(255,255,255,0.54);
+}
+
+/* Base */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+  background-color: var(--tmc-bg-dark);
+  color: var(--tmc-text-light);
+}
+
+/* Fix Angular Material input text & label colours on dark background */
+.mat-mdc-form-field {
+  .mat-mdc-input-element,
+  input.mat-mdc-input-element {
+    color: #ffffff !important;
+    caret-color: #ffffff !important;
+  }
+
+  .mdc-floating-label,
+  .mat-mdc-floating-label {
+    color: rgba(255,255,255,0.6) !important;
+  }
+
+  .mdc-text-field--outlined .mdc-notched-outline__leading,
+  .mdc-text-field--outlined .mdc-notched-outline__notch,
+  .mdc-text-field--outlined .mdc-notched-outline__trailing {
+    border-color: rgba(255,255,255,0.3) !important;
+  }
+
+  &:hover .mdc-text-field--outlined .mdc-notched-outline__leading,
+  &:hover .mdc-text-field--outlined .mdc-notched-outline__notch,
+  &:hover .mdc-text-field--outlined .mdc-notched-outline__trailing {
+    border-color: rgba(255,255,255,0.6) !important;
+  }
+
+  .mdc-text-field--focused .mdc-notched-outline__leading,
+  .mdc-text-field--focused .mdc-notched-outline__notch,
+  .mdc-text-field--focused .mdc-notched-outline__trailing {
+    border-color: #90caf9 !important;
+  }
+
+  .mat-mdc-select-value,
+  .mat-mdc-select-placeholder {
+    color: #ffffff !important;
+  }
+}
+
+/* Fix mat-icon using Material Icons ligature font */
+.mat-icon {
+  font-family: 'Material Icons' !important;
+  font-size: 24px;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+/* Ensure all Material list item icons and text are visible */
+.mat-mdc-list-item .mat-icon,
+.mat-mdc-nav-list .mat-icon,
+[matListItemIcon] {
+  font-family: 'Material Icons' !important;
+  color: #ffffff !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.mdc-list-item__primary-text,
+.mat-mdc-list-item-title,
+.mdc-list-item .mdc-list-item__content {
+  color: #ffffff !important;
+}
+
+/* ── Severity chips / badges ─────────────────────────────── */
+.severity-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.severity-CRITICAL { background: var(--tmc-red);    color: #fff; }
+.severity-HIGH     { background: var(--tmc-orange);  color: #fff; }
+.severity-MODERATE { background: var(--tmc-gold);    color: #000; }
+.severity-LOW      { background: var(--tmc-green);   color: #fff; }
+
+/* ── Status chips ────────────────────────────────────────── */
+.status-ONLINE      { color: #69f0ae; }
+.status-OFFLINE     { color: #ef5350; }
+.status-DEGRADED    { color: #ffa726; }
+.status-MAINTENANCE { color: #90caf9; }
+.status-UNKNOWN     { color: #78909c; }
+
+/* ── Dashboard stat cards ────────────────────────────────── */
+.stat-card {
+  background: var(--tmc-bg-panel);
+  border-radius: 8px;
+  padding: 20px 24px;
+  border-left: 4px solid var(--tmc-navy);
+
+  .stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--tmc-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  &.critical { border-color: var(--tmc-red); }
+  &.warning  { border-color: var(--tmc-orange); }
+  &.info     { border-color: var(--tmc-gold); }
+  &.success  { border-color: var(--tmc-green); }
+}
+
+/* ── Angular Material overrides for dark TMC theme ────────── */
+.mat-mdc-card {
+  background-color: var(--tmc-bg-panel) !important;
+  color: var(--tmc-text-light) !important;
+}
+
+.mat-mdc-table {
+  background: transparent !important;
+
+  .mat-mdc-header-row {
+    background: rgba(0, 45, 114, 0.6) !important;
+  }
+
+  .mat-mdc-row:hover {
+    background: rgba(255,255,255,0.05) !important;
+  }
+
+  .mdc-data-table__cell,
+  .mdc-data-table__header-cell {
+    color: var(--tmc-text-light) !important;
+    border-color: rgba(255,255,255,0.08) !important;
+  }
+}
+
+.mat-mdc-paginator {
+  background: transparent !important;
+  color: #ffffff !important;
+}
+
+/* ── Force white text on all Material list items & toolbar ── */
+.mat-mdc-list-item,
+.mdc-list-item__primary-text,
+.mat-mdc-list-item .mdc-list-item__content,
+.mat-mdc-nav-list .mat-mdc-list-item span,
+.mat-mdc-nav-list a {
+  color: #ffffff !important;
+}
+
+.mat-toolbar,
+.mat-toolbar span,
+.mat-toolbar .mat-icon {
+  color: #ffffff !important;
+}
+
+.mat-mdc-select-value-text,
+.mat-mdc-option .mdc-list-item__primary-text {
+  color: #ffffff !important;
+}
+
+.mat-mdc-menu-item,
+.mat-mdc-menu-item .mdc-list-item__primary-text {
+  color: #ffffff !important;
+}
+
+.mat-mdc-dialog-title,
+.mat-mdc-dialog-content,
+.mat-mdc-dialog-container {
+  color: #ffffff !important;
+  background-color: var(--tmc-bg-panel) !important;
+}
+
+/* ── Live indicator pulse ───────────────────────────────── */
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(1.15); }
+}
+
+.live-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #69f0ae;
+  margin-right: 6px;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+/* ── Scrollbar (Chrome/Edge) ────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.35); }

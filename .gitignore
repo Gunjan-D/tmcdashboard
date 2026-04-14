@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# Angular cache
+.angular/
+frontend/.angular/
+
+# NestJS / TypeScript build
+backend/dist/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+frontend/src/environments/environment.prod.ts
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/settings.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# MongoDB data
+data/

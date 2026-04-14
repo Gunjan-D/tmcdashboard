@@ -1,0 +1,35 @@
+.incidents-container { padding: 24px; }
+
+.page-header {
+  display: flex; align-items: center; gap: 16px; margin-bottom: 20px;
+  h1 { display: flex; align-items: center; gap: 8px; font-size: 1.5rem; margin: 0; }
+}
+
+.total-badge {
+  background: rgba(255,255,255,0.08); padding: 4px 12px;
+  border-radius: 20px; font-size: 0.8rem; color: var(--tmc-text-muted);
+}
+
+.filter-card { margin-bottom: 20px; padding: 16px; }
+.filter-form { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.filter-field { min-width: 160px; max-width: 200px; }
+.filter-actions { display: flex; gap: 8px; align-items: center; }
+
+.loading-area { display: flex; align-items: center; gap: 12px; padding: 24px; color: var(--tmc-text-muted); }
+
+.table-card { overflow: hidden; }
+.table-wrapper { overflow-x: auto; max-height: 600px; overflow-y: auto; }
+.tmc-table { width: 100%; }
+
+.incident-id { font-family: monospace; color: #90caf9; font-size: 0.82rem; }
+
+.location-cell { max-width: 240px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.status-icon { font-size: 16px; width: 16px; height: 16px; vertical-align: middle; margin-right: 4px; }
+.status-OPEN       { color: #ef5350; }
+.status-ASSIGNED   { color: #ffa726; }
+.status-IN_PROGRESS{ color: #29b6f6; }
+.status-RESOLVED   { color: #66bb6a; }
+.status-CLOSED     { color: #78909c; }
+
+.critical-row { background: rgba(204, 0, 0, 0.08) !important; }

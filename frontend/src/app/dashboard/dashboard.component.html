@@ -1,0 +1,166 @@
+<div class="dashboard-container">
+
+  <!-- Page header -->
+  <div class="page-header">
+    <div class="header-left">
+      <h1>Operations Dashboard</h1>
+      <p class="subheading">
+        <span class="live-dot"></span>
+        Real-time – Delaware I-95 Corridor &amp; State Routes
+      </p>
+    </div>
+    <div class="header-right">
+      <span class="ws-status" [class.connected]="wsConnected()">
+        <mat-icon>{{ wsConnected() ? 'wifi' : 'wifi_off' }}</mat-icon>
+        {{ wsConnected() ? 'Live' : 'Reconnecting…' }}
+      </span>
+      <button mat-icon-button (click)="refresh()" matTooltip="Refresh data">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- KPI Cards (Angular Signals-powered) -->
+  <div class="kpi-grid" *ngIf="!loading(); else spinner">
+
+    <div class="stat-card critical">
+      <div class="stat-value">{{ totalActive() }}</div>
+      <div class="stat-label">Active Incidents</div>
+      <mat-icon class="card-icon">warning</mat-icon>
+    </div>
+
+    <div class="stat-card warning">
+      <div class="stat-value">{{ criticalCount() }}</div>
+      <div class="stat-label">Critical Severity</div>
+      <mat-icon class="card-icon">priority_high</mat-icon>
+    </div>
+
+    <div class="stat-card success">
+      <div class="stat-value">{{ devicesOnline() }}</div>
+      <div class="stat-label">Devices Online</div>
+      <mat-icon class="card-icon">sensors</mat-icon>
+    </div>
+
+    <div class="stat-card" [class.warning]="devicesOffline() > 0" [class.success]="devicesOffline() === 0">
+      <div class="stat-value">{{ devicesOffline() }}</div>
+      <div class="stat-label">Devices Offline</div>
+      <mat-icon class="card-icon">sensors_off</mat-icon>
+    </div>
+
+  </div>
+
+  <ng-template #spinner>
+    <div class="loading-area">
+      <mat-spinner diameter="40" />
+      <span>Loading live data…</span>
+    </div>
+  </ng-template>
+
+  <!-- Heartbeat stats (refreshed every 30 s via WebSocket) -->
+  <div class="heartbeat-bar" *ngIf="heartbeat()">
+    <mat-icon>monitor_heart</mat-icon>
+    Server heartbeat — Active: {{ heartbeat()!.activeIncidents }} incidents &nbsp;|&nbsp;
+    Online: {{ heartbeat()!.devicesOnline }} / Offline: {{ heartbeat()!.devicesOffline }} devices &nbsp;|&nbsp;
+    {{ heartbeat()!.serverTime | date:'HH:mm:ss' }} ET
+  </div>
+
+  <!-- Main content grid -->
+  <div class="content-grid">
+
+    <!-- Incidents by Type -->
+    <mat-card class="panel">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>traffic</mat-icon> Active Incidents by Type
+        </mat-card-title>
+        <span class="spacer"></span>
+        <a mat-button routerLink="/incidents" color="primary">View All</a>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="bar-chart" *ngIf="summary()?.activeByType?.length; else noData">
+          <div
+            class="bar-row"
+            *ngFor="let row of summary()!.activeByType"
+          >
+            <span class="bar-label">{{ row._id | titlecase }}</span>
+            <div class="bar-track">
+              <div
+                class="bar-fill"
+                [style.width.%]="(row.count / (totalActive() || 1)) * 100"
+              ></div>
+            </div>
+            <span class="bar-count">{{ row.count }}</span>
+          </div>
+        </div>
+        <ng-template #noData>
+          <p class="no-data"><mat-icon>check_circle</mat-icon> No active incidents</p>
+        </ng-template>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Device Health -->
+    <mat-card class="panel">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>device_hub</mat-icon> ITS Device Health
+        </mat-card-title>
+        <span class="spacer"></span>
+        <a mat-button routerLink="/devices" color="primary">View All</a>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="device-health-grid">
+          <div
+            class="health-chip"
+            *ngFor="let h of deviceHealth()"
+            [class]="'status-' + h._id"
+          >
+            <span class="h-count">{{ h.count }}</span>
+            <span class="h-label">{{ h._id }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Real-time Alert Feed -->
+    <mat-card class="panel alerts-panel">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>notifications_active</mat-icon> Live Alert Feed
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="recentAlerts().length; else noAlerts">
+          <div class="alert-item" *ngFor="let alert of recentAlerts()">
+            {{ alert }}
+          </div>
+        </div>
+        <ng-template #noAlerts>
+          <p class="no-data"><mat-icon>notifications_none</mat-icon> No new alerts</p>
+        </ng-template>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Recently Resolved -->
+    <mat-card class="panel">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>task_alt</mat-icon> Recently Resolved
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="recent-list" *ngIf="summary()?.recentResolved?.length; else noResolved">
+          <div class="recent-item" *ngFor="let inc of summary()!.recentResolved">
+            <span class="ri-id">{{ inc.incidentId }}</span>
+            <span class="ri-loc">{{ inc.location }}</span>
+            <span class="severity-badge" [class]="'severity-' + inc.severity">{{ inc.severity }}</span>
+          </div>
+        </div>
+        <ng-template #noResolved>
+          <p class="no-data">No recently resolved incidents</p>
+        </ng-template>
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+
+</div>

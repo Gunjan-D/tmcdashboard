@@ -1,0 +1,173 @@
+<div class="incidents-container">
+
+  <!-- Header -->
+  <div class="page-header">
+    <h1><mat-icon>warning</mat-icon> Incident Management</h1>
+    <span class="total-badge">{{ totalCount() }} total records</span>
+  </div>
+
+  <!-- Filter Bar -->
+  <mat-card class="filter-card">
+    <form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="filter-form">
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status">
+          <mat-option value="">All</mat-option>
+          <mat-option *ngFor="let s of statusOptions" [value]="s">{{ s }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Severity</mat-label>
+        <mat-select formControlName="severity">
+          <mat-option value="">All</mat-option>
+          <mat-option *ngFor="let s of severityOptions" [value]="s">{{ s }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Type</mat-label>
+        <mat-select formControlName="type">
+          <mat-option value="">All</mat-option>
+          <mat-option *ngFor="let t of typeOptions" [value]="t">{{ t | titlecase }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Date From</mat-label>
+        <input matInput type="date" formControlName="dateFrom">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Date To</mat-label>
+        <input matInput type="date" formControlName="dateTo">
+      </mat-form-field>
+
+      <div class="filter-actions">
+        <button mat-flat-button color="primary" type="submit">
+          <mat-icon>filter_list</mat-icon> Filter
+        </button>
+        <button mat-button type="button" (click)="clearFilters()">Clear</button>
+      </div>
+    </form>
+  </mat-card>
+
+  <!-- Spinner -->
+  <div class="loading-area" *ngIf="loading()">
+    <mat-spinner diameter="36"></mat-spinner>
+    <span>Loading incidents…</span>
+  </div>
+
+  <!-- Data table -->
+  <mat-card class="table-card" *ngIf="!loading()">
+    <div class="table-wrapper">
+      <table mat-table [dataSource]="incidents()" class="tmc-table">
+
+        <!-- Incident ID -->
+        <ng-container matColumnDef="incidentId">
+          <th mat-header-cell *matHeaderCellDef>Incident ID</th>
+          <td mat-cell *matCellDef="let row">
+            <code class="incident-id">{{ row.incidentId }}</code>
+          </td>
+        </ng-container>
+
+        <!-- Type -->
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef>Type</th>
+          <td mat-cell *matCellDef="let row">{{ row.type | titlecase }}</td>
+        </ng-container>
+
+        <!-- Severity -->
+        <ng-container matColumnDef="severity">
+          <th mat-header-cell *matHeaderCellDef>Severity</th>
+          <td mat-cell *matCellDef="let row">
+            <span class="severity-badge" [class]="'severity-' + row.severity">{{ row.severity }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Status -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let row">
+            <mat-icon class="status-icon" [class]="'status-' + row.status">{{ getStatusIcon(row.status) }}</mat-icon>
+            {{ row.status | titlecase }}
+          </td>
+        </ng-container>
+
+        <!-- Location -->
+        <ng-container matColumnDef="location">
+          <th mat-header-cell *matHeaderCellDef>Location</th>
+          <td mat-cell *matCellDef="let row" class="location-cell">{{ row.location }}</td>
+        </ng-container>
+
+        <!-- Reported By -->
+        <ng-container matColumnDef="reportedBy">
+          <th mat-header-cell *matHeaderCellDef>Reported By</th>
+          <td mat-cell *matCellDef="let row">{{ row.reportedBy }}</td>
+        </ng-container>
+
+        <!-- Detected At -->
+        <ng-container matColumnDef="detectedAt">
+          <th mat-header-cell *matHeaderCellDef>Detected</th>
+          <td mat-cell *matCellDef="let row">{{ row.detectedAt | date:'MM/dd HH:mm' }}</td>
+        </ng-container>
+
+        <!-- Actions -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let row">
+            <button
+              mat-icon-button
+              matTooltip="Assign to responder"
+              (click)="updateStatus(row, 'ASSIGNED')"
+              *ngIf="row.status === 'OPEN'"
+            >
+              <mat-icon>assignment_ind</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              matTooltip="Mark In Progress"
+              (click)="updateStatus(row, 'IN_PROGRESS')"
+              *ngIf="row.status === 'ASSIGNED'"
+            >
+              <mat-icon>directions_car</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              matTooltip="Resolve incident"
+              (click)="updateStatus(row, 'RESOLVED')"
+              *ngIf="row.status === 'IN_PROGRESS'"
+            >
+              <mat-icon>check_circle_outline</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              matTooltip="Acknowledge alert"
+              (click)="acknowledgeAlert(row)"
+              *ngIf="row.status === 'OPEN'"
+            >
+              <mat-icon>notifications_active</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          [class.critical-row]="row.severity === 'CRITICAL'"
+        ></tr>
+      </table>
+    </div>
+
+    <mat-paginator
+      [length]="totalCount()"
+      [pageSize]="pageSize()"
+      [pageSizeOptions]="[10, 20, 50, 100]"
+      (page)="onPageChange($event)"
+      showFirstLastButtons
+    ></mat-paginator>
+  </mat-card>
+
+</div>

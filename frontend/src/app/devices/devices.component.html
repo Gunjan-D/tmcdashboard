@@ -1,0 +1,126 @@
+<div class="devices-container">
+
+  <div class="page-header">
+    <h1><mat-icon>device_hub</mat-icon> ITS Device Monitoring</h1>
+    <button mat-stroked-button (click)="loadDevices()">
+      <mat-icon>refresh</mat-icon> Refresh
+    </button>
+  </div>
+
+  <!-- Health summary chips -->
+  <div class="health-chips" *ngIf="health().length">
+    <span
+      *ngFor="let h of health()"
+      class="health-chip"
+      [class]="'status-' + h._id"
+      (click)="filterByType('')"
+    >
+      <strong>{{ h.count }}</strong> {{ h._id }}
+    </span>
+  </div>
+
+  <!-- Type filter -->
+  <div class="filter-row">
+    <button mat-button [class.active]="!typeFilter()" (click)="filterByType('')">All</button>
+    <button
+      mat-button
+      *ngFor="let t of deviceTypes"
+      [class.active]="typeFilter() === t"
+      (click)="filterByType(t)"
+    >
+      <mat-icon>{{ getDeviceIcon(t) }}</mat-icon>
+      {{ t | titlecase }}
+    </button>
+  </div>
+
+  <!-- Alert feed -->
+  <div class="alert-feed" *ngIf="alerts().length">
+    <div class="alert-title"><mat-icon>warning</mat-icon> Recent Device Alerts</div>
+    <div *ngFor="let a of alerts()" class="alert-row">
+      <mat-icon class="status-OFFLINE">sensors_off</mat-icon>
+      {{ a.name }} — {{ a.location }} &nbsp;
+      <small>{{ a.timestamp | date:'HH:mm:ss' }}</small>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-area" *ngIf="loading()">
+    <mat-spinner diameter="36"></mat-spinner> Loading devices…
+  </div>
+
+  <!-- Devices table -->
+  <mat-card class="table-card" *ngIf="!loading()">
+    <div class="table-wrapper">
+      <table mat-table [dataSource]="devices()" class="tmc-table">
+
+        <ng-container matColumnDef="deviceId">
+          <th mat-header-cell *matHeaderCellDef>Device ID</th>
+          <td mat-cell *matCellDef="let d"><code class="device-id">{{ d.deviceId }}</code></td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let d">{{ d.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef>Type</th>
+          <td mat-cell *matCellDef="let d">
+            <mat-icon class="type-icon">{{ getDeviceIcon(d.type) }}</mat-icon>
+            {{ d.type | titlecase }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let d">
+            <span class="status-dot" [class]="'status-' + d.status"></span>
+            <span [class]="'status-' + d.status">{{ d.status }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="location">
+          <th mat-header-cell *matHeaderCellDef>Location</th>
+          <td mat-cell *matCellDef="let d" class="location-cell">{{ d.location }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="lastPolledAt">
+          <th mat-header-cell *matHeaderCellDef>Last Polled</th>
+          <td mat-cell *matCellDef="let d">
+            {{ d.lastPolledAt ? (d.lastPolledAt | date:'HH:mm:ss') : 'Never' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="failureCount">
+          <th mat-header-cell *matHeaderCellDef>Failures</th>
+          <td mat-cell *matCellDef="let d">
+            <span [class.error-count]="d.failureCount > 0">{{ d.failureCount ?? 0 }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let d">
+            <button
+              mat-icon-button
+              matTooltip="SNMP Poll now"
+              (click)="pollDevice(d)"
+              [disabled]="polling() === d.deviceId"
+            >
+              <mat-spinner *ngIf="polling() === d.deviceId" diameter="20"></mat-spinner>
+              <mat-icon *ngIf="polling() !== d.deviceId">wifi_find</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          [class.offline-row]="row.status === 'OFFLINE'"
+        ></tr>
+      </table>
+    </div>
+  </mat-card>
+
+</div>
