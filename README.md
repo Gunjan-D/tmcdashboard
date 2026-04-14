@@ -1,9 +1,8 @@
 # Delaware TMC Operations Dashboard
-### Full-Stack Portfolio Project — *Best-fit for DE DOT Traffic Management Center Product Specialist*
-
-> **Tech stack alignment:** Every required and highly-desired skill from the job description is demonstrated in this project.
+### Full-Stack Portfolio Project 
 
 ---
+This project is intended solely for personal learning and practice purposes and does not involve any real or sensitive data. 
 
 ## Project Overview
 
