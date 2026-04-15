@@ -230,8 +230,5 @@ DocumentRoot /var/www/tmc
 
 ## Author
 Portfolio project demonstrating full-stack development for the
-**Delaware DOT Traffic Management Center Product Specialist** role.
-
-*Technologies: Angular 17 Â· TypeScript Â· NestJS Â· Node.js Â· MongoDB Â· Socket.io Â· ExcelJS Â·
-SNMP/NTCIP Â· LDAP Â· JWT Â· Angular Material Â· Angular Signals Â· Oracle/MySQL/PostgreSQL DDL*
+//////////////////////////////////////////////////////////////////////////
 
